@@ -17,10 +17,12 @@ def create_db():
     if not Tables:
         Tables = cur.execute('''CREATE TABLE ID_VK
                  (ID_S SERIAL PRIMARY KEY NOT NULL,
-                 LINK TEXT NOT NULL,
                  ID_FROM_VK INT NOT NULL,
                  NAME TEXT NOT NULL,
-                 SONGS TEXT NOT NULL);
+                 SONGS TEXT NOT NULL,
+                 CITY TEXT NOT NULL,
+                 PHOTO_LINK TEXT NOT NULL,
+                 INTERESTS TEXT NOT NULL);
                  ''')
         connection.commit()
     else:
@@ -35,13 +37,15 @@ class WriteInSQL(WorkWithVk):
         super().__init__(login, password, dictionary=self.dictionary)
 
     def write_in_data_base(self):
+        name = self.dictionary['name']
+        sex = self.dictionary['sex']
+        interests = self.dictionary['interest']
+        photo = self.dictionary['photo']
+        city = self.dictionary['city']
         songs = self.dictionary['15 первых песен']
         user_id_converted = self.dictionary['id']
-        cur.execute('INSERT INTO ID_VK(LINK) VALUES(%s);',
-                    (user_id_converted,))
-        connection.commit()
-        cur.execute('INSERT INTO ID_VK(SONGS) VALUES(%s);',
-                    (songs,))
+        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY ) VALUES(%s);',
+                    (user_id_converted, name, city, photo, sex, interests, songs))
         connection.commit()
 
 

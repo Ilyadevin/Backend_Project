@@ -1,14 +1,10 @@
-import vk
+# import vk
 import vk_api
 from vk_api.audio import VkAudio
 import os
 import json
 import collections
-
-#
-log_in = input("Введите логин: ")
-#
-pass_word = input("Введите пароль: ")
+from user_main_file import log_in, pass_word
 
 
 def auth_handler():
@@ -28,6 +24,13 @@ class WorkWithVk:
         self.access_token = access_token
         self.dictionary = dictionary
         self.track = track
+        self.city = None
+        self.sex = None
+        self.photo = None
+        self.interests = None
+        self.music = None
+        self.activities = None
+        self.name = None
 
     def LogIn(self):
         self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
@@ -37,7 +40,6 @@ class WorkWithVk:
         try:
             User = VK_auth.users.get()
             User_2 = VK_auth.users.get(fields='sex, city, interests, activities, music, movies, photo_400_orig')
-            print(User_2)
         except Exception as e:
             print(e)
         else:
@@ -49,10 +51,17 @@ class WorkWithVk:
             for xxx in data[self.login]['token'].keys():
                 for yyy in data[self.login]['token'][xxx].keys():
                     self.access_token = data[self.login]['token'][xxx][yyy]['access_token']
-
+            for xxx in User_2:
+                self.city = xxx['city']['title']
+                self.sex = xxx['sex']
+                self.photo = xxx['photo_400_orig']
+                self.interests = xxx['interests']
+                self.music = xxx['music']
+                self.activities = xxx['activities']
+                self.name = xxx['name']
             print('=' * 85)
             print(f"Твой ID {User[0]['id']}")
-            self.user_id = User[0]['id']
+            self.user_id = f"https://vk.com/id{User[0]['id']}"
             print('=' * 85)
             print(f"Access_Token: {self.access_token}")
             print('=' * 85)
@@ -76,19 +85,13 @@ class WorkWithVk:
         for self.n, self.track in enumerate(tracks, 1):
             print('{}. {} {}'.format(self.n, self.track['title'], self.track['url']))
 
-    def getting_fields(self):
-        session = vk.Session(access_token=self.access_token)
-        vk_api_fields = vk.API(session)
-        vk_api_fields.users.get(id=self.user_id,
-                                fields='sex, city, interests, activities, music, movies, photo_400_orig')
-        print(vk_api_fields)
-
     def in_dict(self):
         for _ in range(0, 15):
-            self.dictionary = {'id': f'https://vk.com/{self.user_id}', '15 первых песен': [self.track['title']]}
+            self.dictionary = {'id': self.user_id, 'city': self.city, 'name': self.name, 'photo': self.photo,
+                               'interests': self.interests,
+                               '15 первых песен': [self.track['title']]}
 
 
 VK_class = WorkWithVk(log_in, pass_word)
 VK_class.LogIn()
 VK_class.getting_15_audios()
-# VK_class.getting_fields()
