@@ -1,10 +1,11 @@
-# import vk
 import vk_api
 from vk_api.audio import VkAudio
 import os
 import json
 import collections
 from user_main_file import log_in, pass_word
+import time
+import datetime
 
 
 def auth_handler():
@@ -31,6 +32,7 @@ class WorkWithVk:
         self.music = None
         self.activities = None
         self.name = None
+        self.bdate = None
 
     def LogIn(self):
         self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
@@ -39,7 +41,7 @@ class WorkWithVk:
 
         try:
             User = VK_auth.users.get()
-            User_2 = VK_auth.users.get(fields='sex, city, interests, activities, music, movies, photo_400_orig')
+            User_2 = VK_auth.users.get(fields='sex, bdate, city, interests, activities, music, movies, photo_400_orig')
         except Exception as e:
             print(e)
         else:
@@ -54,11 +56,18 @@ class WorkWithVk:
             for xxx in User_2:
                 self.city = xxx['city']['title']
                 self.sex = xxx['sex']
+                if self.sex == "1":
+                    self.sex = 'Женский'
+                elif self.sex == '2':
+                    self.sex = 'Мужской'
+                else:
+                    self.sex = "Не указан"
                 self.photo = xxx['photo_400_orig']
                 self.interests = xxx['interests']
                 self.music = xxx['music']
                 self.activities = xxx['activities']
                 self.name = xxx['name']
+                self.bdate = datetime.datetime.now() - time.strptime(xxx['bdate'], '%D.%M.%YYYY')
             print('=' * 85)
             print(f"Твой ID {User[0]['id']}")
             self.user_id = f"https://vk.com/id{User[0]['id']}"
@@ -87,7 +96,12 @@ class WorkWithVk:
 
     def in_dict(self):
         for _ in range(0, 15):
-            self.dictionary = {'id': self.user_id, 'city': self.city, 'name': self.name, 'photo': self.photo,
+            self.dictionary = {'id': self.user_id,
+                               'city': self.city,
+                               'name': self.name,
+                               'bdate': self.bdate,
+                               'photo': self.photo,
+                               'sex': self.sex,
                                'interests': self.interests,
                                '15 первых песен': [self.track['title']]}
 
