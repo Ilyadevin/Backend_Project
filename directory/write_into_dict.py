@@ -1,4 +1,4 @@
-from getting_data import WorkWithVk, log_in, pass_word
+from user_main_file import UserInterFace
 import psycopg2
 
 connection = psycopg2.connect(
@@ -32,9 +32,9 @@ def create_db():
 create_db()
 
 
-class WriteInSQL(WorkWithVk):
-    def __init__(self, login, password):
-        super().__init__(login, password, dictionary=self.dictionary)
+class WriteInSQL(UserInterFace):
+    def __init__(self, login=None, password=None):
+        super().__init__(login, password)
 
     def write_in_data_base(self):
         name = self.dictionary['name']
@@ -49,5 +49,5 @@ class WriteInSQL(WorkWithVk):
         connection.commit()
 
 
-SQL = WriteInSQL(log_in, pass_word)
+SQL = WriteInSQL()
 SQL.write_in_data_base()

@@ -11,6 +11,8 @@ class UserInterFace(WorkWithVk):
     def __init__(self, login, password):
         super().__init__(login, password, dictionary=self.dictionary)
         self.opposite_sex = None
+        self.new_data = None
+        self.age = None
 
     def check_input(self, ):
         if self.dictionary['sex'] == 'Мужской':
@@ -39,13 +41,20 @@ class UserInterFace(WorkWithVk):
         if decide == 'Y':
             pass
         else:
-            name = input("Ваше имя? ")
-            age = input("Сколько вам лет? ")
-            city = input("В каком городе вы живете? ")
-            interests = input("Чем вы занимаетесь в свободное время? ")
-            new_data = {'name': name, 'bdate': age, 'city': city, 'interests': interests}
-            if name and age and city and interests is True:
-                self.dictionary.update(new_data)
+            self.name = input("Ваше имя? ")
+            self.age = input("Сколько вам лет? ")
+            self.city = input("В каком городе вы живете? ")
+            self.interests = input("Чем вы занимаетесь в свободное время? ")
+            self.new_data = {'name': self.name,
+                             'bdate': self.age,
+                             'city': self.city,
+                             'interests': self.interests}
+
+    def update_dict(self):
+        if self.name and self.age and self.city and self.interests is True:
+            self.dictionary.update(self.new_data)
+        return self.dictionary
 
 
-UserInterFace(log_in, pass_word)
+User = UserInterFace(log_in, pass_word)
+User.update_dict()
