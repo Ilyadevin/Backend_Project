@@ -17,8 +17,9 @@ def create_db():
     if not Tables:
         Tables = cur.execute('''CREATE TABLE ID_VK
                  (ID_S SERIAL PRIMARY KEY NOT NULL,
-                 ID_FROM_VK INT NOT NULL,
+                 LINK INT NOT NULL,
                  NAME TEXT NOT NULL,
+                 SEX TEXT NOT NULL,
                  SONGS TEXT NOT NULL,
                  CITY TEXT NOT NULL,
                  PHOTO_LINK TEXT NOT NULL,
@@ -39,13 +40,14 @@ class WriteInSQL(UserInterFace):
     def write_in_data_base(self):
         name = self.dictionary['name']
         sex = self.dictionary['sex']
-        interests = self.dictionary['interest']
+        interests = self.dictionary['interest'].split(" ")
         photo = self.dictionary['photo']
         city = self.dictionary['city']
         songs = self.dictionary['15 первых песен']
         user_id_converted = self.dictionary['id']
-        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY ) VALUES(%s);',
-                    (user_id_converted, name, city, photo, sex, interests, songs))
+        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY ) '
+                    'VALUES(%s,%s,%s,%s,%s,%s,%s);',
+                    (user_id_converted, name, city, photo, sex, interests, songs,))
         connection.commit()
 
 

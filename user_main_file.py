@@ -1,7 +1,7 @@
 from getting_data import WorkWithVk
 
 print('Привет! Ты хочешь найти себе пару? '
-      'У меня есть кое-что для тебя, но для начала познакомимся!')
+      'У меня есть кое-что для тебя, но для начала - познакомимся!')
 log_in = input("Введите логин: ")
 pass_word = input("Введите пароль: ")
 
@@ -38,9 +38,9 @@ class UserInterFace(WorkWithVk):
               f'Ваши интересы(указанные в профиле):\n'
               f'{self.dictionary["interests"]}\n')
         decide = input('Верны ли данные?(Y/N)')
-        if decide == 'Y':
+        if decide == 'Y' or 'y':
             pass
-        else:
+        elif decide == 'N' or 'n':
             self.name = input("Ваше имя? ")
             self.age = input("Сколько вам лет? ")
             self.city = input("В каком городе вы живете? ")
@@ -48,7 +48,9 @@ class UserInterFace(WorkWithVk):
             self.new_data = {'name': self.name,
                              'bdate': self.age,
                              'city': self.city,
-                             'interests': self.interests}
+                             'interests': self.interests.split(" ")}
+        else:
+            print('Error')
 
     def update_dict(self):
         if self.name and self.age and self.city and self.interests is True:
