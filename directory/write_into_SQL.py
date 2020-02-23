@@ -1,4 +1,4 @@
-from user_main_file import UserInterFace
+from directory.check_user_data import DataCheck
 import psycopg2
 
 connection = psycopg2.connect(
@@ -23,7 +23,8 @@ def create_db():
                  SONGS TEXT NOT NULL,
                  CITY TEXT NOT NULL,
                  PHOTO_LINK TEXT NOT NULL,
-                 INTERESTS TEXT NOT NULL);
+                 INTERESTS TEXT NOT NULL
+                 FRIENDS_ID LIST NOT NULL);
                  ''')
         connection.commit()
     else:
@@ -33,21 +34,22 @@ def create_db():
 create_db()
 
 
-class WriteInSQL(UserInterFace):
-    def __init__(self, login=None, password=None):
-        super().__init__(login, password)
+class WriteInSQL(DataCheck):
+    def __init__(self):
+        super().__init__()
 
     def write_in_data_base(self):
         name = self.dictionary['name']
         sex = self.dictionary['sex']
-        interests = self.dictionary['interest'].split(" ")
+        interests = self.dictionary['interest']
+        friends = self.dictionary['friends_id']
         photo = self.dictionary['photo']
         city = self.dictionary['city']
-        songs = self.dictionary['15 первых песен']
+        songs = self.dictionary['audio']
         user_id_converted = self.dictionary['id']
-        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY ) '
-                    'VALUES(%s,%s,%s,%s,%s,%s,%s);',
-                    (user_id_converted, name, city, photo, sex, interests, songs,))
+        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID) '
+                    'VALUES(%s,%s,%s,%s,%s,%s,%s, );',
+                    (user_id_converted, name, city, photo, sex, interests, songs, friends,))
         connection.commit()
 
 

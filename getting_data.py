@@ -33,6 +33,8 @@ class WorkWithVk:
         self.activities = None
         self.name = None
         self.bdate = None
+        self.friends_id = None
+        self.audios = None
 
     def LogIn(self):
         self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
@@ -41,7 +43,14 @@ class WorkWithVk:
 
         try:
             User = VK_auth.users.get()
-            User_2 = VK_auth.users.get(fields='sex, bdate, city, interests, activities, music, movies, photo_400_orig')
+            user_info = VK_auth.users.get(fields='sex, '
+                                                 'bdate, '
+                                                 'city, '
+                                                 'interests, '
+                                                 'activities, '
+                                                 'movies, '
+                                                 'photo_400_orig')
+            user_friends = VK_auth.friends.getLists()
         except Exception as e:
             print(e)
         else:
@@ -49,11 +58,11 @@ class WorkWithVk:
 
             with open('vk_config.v2.json', 'r') as data_file:
                 data = json.load(data_file)
-
+            self.audios = []
             for xxx in data[self.login]['token'].keys():
                 for yyy in data[self.login]['token'][xxx].keys():
                     self.access_token = data[self.login]['token'][xxx][yyy]['access_token']
-            for xxx in User_2:
+            for xxx in user_info:
                 self.city = xxx['city']['title']
                 self.sex = xxx['sex']
                 if self.sex == "1":
@@ -64,16 +73,14 @@ class WorkWithVk:
                     self.sex = "Не указан"
                 self.photo = xxx['photo_400_orig']
                 self.interests = xxx['interests']
-                self.music = xxx['music']
                 self.activities = xxx['activities']
                 self.name = xxx['name']
                 self.bdate = datetime.datetime.now() - time.strptime(xxx['bdate'], '%D.%M.%YYYY')
-            print('=' * 85)
-            print(f"Твой ID {User[0]['id']}")
+            self.friends_id = []
+            for zzz in user_friends:
+                friends_id = zzz['id']
+                self.friends_id.append(friends_id)
             self.user_id = f"https://vk.com/id{User[0]['id']}"
-            print('=' * 85)
-            print(f"Access_Token: {self.access_token}")
-            print('=' * 85)
             os.remove('vk_config.v2.json')
 
     def getting_15_audios(self):
@@ -82,17 +89,14 @@ class WorkWithVk:
         artists = collections.Counter(
             track['artist'] for track in vk_audio.get_iter()
         )
-        print('Top 15:')
-        for artist, tracks in artists.most_common(15):
-            print('{} - {} tracks'.format(artist, tracks))
         most_common_artist = artists.most_common(1)[0][0]
 
         print('\nSearching for {}:'.format(most_common_artist))
 
         tracks = vk_audio.search(q=most_common_artist, count=10)
-
+        self.audios = []
         for self.n, self.track in enumerate(tracks, 1):
-            print('{}. {} {}'.format(self.n, self.track['title'], self.track['url']))
+            self.audios.append(self.track['title'])
 
     def in_dict(self):
         for _ in range(0, 15):
@@ -103,7 +107,8 @@ class WorkWithVk:
                                'photo': self.photo,
                                'sex': self.sex,
                                'interests': self.interests,
-                               '15 первых песен': [self.track['title']]}
+                               'friends_id': self.friends_id,
+                               'audio': self.audios}
 
 
 VK_class = WorkWithVk(log_in, pass_word)
