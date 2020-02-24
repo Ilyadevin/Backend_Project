@@ -16,6 +16,9 @@ def auth_handler():
 
 class WorkWithVk:
     def __init__(self, login, password, VK=None, user_id=None, access_token=0, dictionary=None, track=None):
+        self.audios = []
+        self.friends_id = []
+        self.groups = []
         if dictionary is None:
             dictionary = {}
         self.login = login
@@ -33,8 +36,6 @@ class WorkWithVk:
         self.activities = None
         self.name = None
         self.bdate = None
-        self.friends_id = None
-        self.audios = None
 
     def LogIn(self):
         self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
@@ -42,7 +43,7 @@ class WorkWithVk:
         VK_auth = self.VK.get_api()
 
         try:
-            User = VK_auth.users.get()
+            user = VK_auth.users.get()
             user_info = VK_auth.users.get(fields='sex, '
                                                  'bdate, '
                                                  'city, '
@@ -51,36 +52,37 @@ class WorkWithVk:
                                                  'movies, '
                                                  'photo_400_orig')
             user_friends = VK_auth.friends.getLists()
+            user_groups = VK_auth.groups.get()
         except Exception as e:
             print(e)
         else:
-            print(f"\nHello {User[0]['first_name']}")
+            print(f"\nHello {user[0]['first_name']}")
 
             with open('vk_config.v2.json', 'r') as data_file:
                 data = json.load(data_file)
-            self.audios = []
             for xxx in data[self.login]['token'].keys():
                 for yyy in data[self.login]['token'][xxx].keys():
                     self.access_token = data[self.login]['token'][xxx][yyy]['access_token']
-            for xxx in user_info:
-                self.city = xxx['city']['title']
-                self.sex = xxx['sex']
+            for yyy in user_info:
+                self.city = yyy['city']['title']
+                self.sex = yyy['sex']
                 if self.sex == "1":
                     self.sex = 'Женский'
                 elif self.sex == '2':
                     self.sex = 'Мужской'
                 else:
                     self.sex = "Не указан"
-                self.photo = xxx['photo_400_orig']
-                self.interests = xxx['interests']
-                self.activities = xxx['activities']
-                self.name = xxx['name']
-                self.bdate = datetime.datetime.now() - time.strptime(xxx['bdate'], '%D.%M.%YYYY')
-            self.friends_id = []
+                self.photo = yyy['photo_400_orig']
+                self.interests = yyy['interests']
+                self.activities = yyy['activities']
+                self.name = yyy['name']
+                self.bdate = datetime.datetime.now() - time.strptime(yyy['bdate'], '%D.%M.%YYYY')
+            for ggg in user_groups["response"]["items"]:
+                self.groups.append(ggg["id"])
             for zzz in user_friends:
                 friends_id = zzz['id']
                 self.friends_id.append(friends_id)
-            self.user_id = f"https://vk.com/id{User[0]['id']}"
+            self.user_id = f"https://vk.com/id{user[0]['id']}"
             os.remove('vk_config.v2.json')
 
     def getting_15_audios(self):
@@ -108,7 +110,8 @@ class WorkWithVk:
                                'sex': self.sex,
                                'interests': self.interests,
                                'friends_id': self.friends_id,
-                               'audio': self.audios}
+                               'audio': self.audios,
+                               'groups': self.groups}
 
 
 VK_class = WorkWithVk(log_in, pass_word)

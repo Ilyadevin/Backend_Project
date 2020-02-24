@@ -17,14 +17,15 @@ def create_db():
     if not Tables:
         Tables = cur.execute('''CREATE TABLE ID_VK
                  (ID_S SERIAL PRIMARY KEY NOT NULL,
-                 LINK INT NOT NULL,
+                 LINK TEXT NOT NULL,
                  NAME TEXT NOT NULL,
                  SEX TEXT NOT NULL,
                  SONGS TEXT NOT NULL,
                  CITY TEXT NOT NULL,
                  PHOTO_LINK TEXT NOT NULL,
-                 INTERESTS TEXT NOT NULL
-                 FRIENDS_ID LIST NOT NULL);
+                 INTERESTS TEXT NOT NULL,
+                 GROUPS INT NOT NULL,
+                 FRIENDS_ID INT NOT NULL);
                  ''')
         connection.commit()
     else:
@@ -40,6 +41,7 @@ class WriteInSQL(DataCheck):
 
     def write_in_data_base(self):
         name = self.dictionary['name']
+        groups = self.dictionary['groups']
         sex = self.dictionary['sex']
         interests = self.dictionary['interest']
         friends = self.dictionary['friends_id']
@@ -47,9 +49,9 @@ class WriteInSQL(DataCheck):
         city = self.dictionary['city']
         songs = self.dictionary['audio']
         user_id_converted = self.dictionary['id']
-        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID) '
-                    'VALUES(%s,%s,%s,%s,%s,%s,%s, );',
-                    (user_id_converted, name, city, photo, sex, interests, songs, friends,))
+        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID, GROUPS) '
+                    'VALUES(%s, %s, %s, %s, %s, %s, %s, %s);',
+                    (user_id_converted, name, city, photo, sex, interests, songs, friends, groups,))
         connection.commit()
 
 
