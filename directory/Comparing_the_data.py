@@ -17,29 +17,36 @@ class DataCompare(DataCheck):
     def __init__(self):
         super().__init__()
         self.comparing_string = self.dictionary['interests']
-        self.counter = 0
         self.comparing_ids = self.dictionary['friends_id']
         self.groups_from_dict = self.dictionary['groups']
+        self.dictionary_compare = dict
 
     def find_the_compare(self):
-        cur.execute('''SELECT ID_S, INTERESTS, FRIENDS_ID, GROUPS FROM ID_VK '''
+        cur.execute('''SELECT ID_S, INTERESTS, FRIENDS_ID, GROUPS, MUSIC FROM ID_VK '''
                     )
         data = cur.fetchall()
-        dict_of_data = {data[0]: {'interest': data[1], 'friends': data[2], 'groups': data[3]}}
-        regex_group = re.compile(self.groups_from_dict)
+        dict_of_data = {data[0]: {'interest': data[1], 'friends': data[2], 'groups': data[3], 'music': data[4]}}
         regex = re.compile(self.comparing_string)
-        regex_id = re.compile(self.comparing_ids)
+        we_find = None
+        counter_group = 0
         for i in dict_of_data:
             we_find_group = i['groups']
             if self.groups_from_dict in we_find_group:
-                
+                counter_group += 1
             we_find = re.findall(regex, i['interest'])
-            we_find_id = re.findall(regex_id, i['friends'])
-            match = 1 * len(we_find) + 2 * len(we_find_id)
+        counter_music = 0
+        for friend in dict_of_data[data[0]]['music']:
+            if friend in self.comparing_ids:
+                counter_music += 1
+            else:
+                pass
+        match = 1 * len(we_find) + 2 * counter_music + 3 * counter_group
+        self.dictionary_compare = {'ids': {'current user': self.dictionary['id'], 'compared_id': dict_of_data.keys()}}
+        for id_vk in dict_of_data:
             if match >= 500:
-                cur.execute('''SELECT ID_S, PHOTO_LINK FROM ID_VK WHERE ID_S=%s''',
-                            (i,))
-                return cur.fetchall()
+                cur.execute('''SELECT ID_S FROM ID_VK WHERE ID_S=%s''',
+                            (id_vk,))
+                return cur.fetchall()[0]
             else:
                 pass
 

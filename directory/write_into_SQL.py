@@ -25,7 +25,8 @@ def create_db():
                  PHOTO_LINK TEXT NOT NULL,
                  INTERESTS TEXT NOT NULL,
                  GROUPS INT NOT NULL,
-                 FRIENDS_ID INT NOT NULL);
+                 FRIENDS_ID INT NOT NULL,
+                 MUSIC TEXT NOT NULL);
                  ''')
         connection.commit()
     else:
@@ -49,9 +50,11 @@ class WriteInSQL(DataCheck):
         city = self.dictionary['city']
         songs = self.dictionary['audio']
         user_id_converted = self.dictionary['id']
-        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID, GROUPS) '
+        audio = self.dictionary['audio']
+        cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID, GROUPS, '
+                    'MUSIC) '
                     'VALUES(%s, %s, %s, %s, %s, %s, %s, %s);',
-                    (user_id_converted, name, city, photo, sex, interests, songs, friends, groups,))
+                    (user_id_converted, name, city, photo, sex, interests, songs, friends, groups, audio,))
         connection.commit()
 
 
