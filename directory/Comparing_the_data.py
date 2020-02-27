@@ -53,7 +53,8 @@ class DataCompare(DataCheck):
                     if match >= 100:
                         cur.execute('''SELECT ID_S FROM ID_VK WHERE ID_S=%s''',
                                     (id_vk,))
-                        return cur.fetchall()[0]
+                        for row in cur.fetchall()[0]:
+                            print(row)
                     else:
                         pass
             else:

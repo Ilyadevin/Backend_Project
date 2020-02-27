@@ -3,12 +3,17 @@ from vk_api.audio import VkAudio
 import os
 import json
 import collections
-from user_main_file import log_in, pass_word
 import time
 import datetime
 
+print('Привет! Ты хочешь найти себе пару? '
+      'У меня есть кое-что для тебя, но для начала - познакомимся!')
+log_in = input("Введите логин: ")
+pass_word = input("Введите пароль: ")
+
 
 def auth_handler():
+    print('Если 2-х афторизация не включена [Enter]')
     key = input("Enter authentication code: ")
     remember_device = True
     return key, remember_device
@@ -56,8 +61,6 @@ class WorkWithVk:
         except Exception as e:
             print(e)
         else:
-            print(f"\nHello {user[0]['first_name']}")
-
             with open('vk_config.v2.json', 'r') as data_file:
                 data = json.load(data_file)
             for xxx in data[self.login]['token'].keys():
@@ -92,8 +95,6 @@ class WorkWithVk:
             track['artist'] for track in vk_audio.get_iter()
         )
         most_common_artist = artists.most_common(1)[0][0]
-
-        print('\nSearching for {}:'.format(most_common_artist))
 
         tracks = vk_audio.search(q=most_common_artist, count=10)
         self.audios = []
