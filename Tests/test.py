@@ -35,3 +35,6 @@ class TestForSQL(unittest.TestCase):
 
     def test_SQL(self):
         WriteInSQL().write_in_data_base()
+
+
+TestForSQL().test_SQL()
