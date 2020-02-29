@@ -11,6 +11,7 @@ class DataCheck(WorkWithVk):
         self.name = None
         self.city = None
         self.interests = None
+        self.new_data = {}
 
     def check_input(self):
         if self.dictionary['sex'] == 'Мужской':
@@ -50,12 +51,12 @@ class DataCheck(WorkWithVk):
                              'bdate': self.age,
                              'city': self.city,
                              'interests': self.interest_input}
+            return self.new_data
         else:
             print('Error')
 
     def update_dict(self):
-        if self.name and self.age and self.city and self.interests is True:
-            self.dictionary.update(self.new_data)
+        self.dictionary.update(self.new_data)
         return self.dictionary
 
 

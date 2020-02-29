@@ -3,8 +3,6 @@ from vk_api.audio import VkAudio
 import os
 import json
 import collections
-import time
-import datetime
 
 print('Привет! Ты хочешь найти себе пару? '
       'У меня есть кое-что для тебя, но для начала - познакомимся!')
@@ -40,7 +38,11 @@ class WorkWithVk:
         self.music = None
         self.activities = None
         self.name = None
-        self.bdate = None
+        self.data = None
+        self.User = None
+        self.User_info = None
+        self.User_friends = None
+        self.User_groups = None
 
     def LogIn(self):
         self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
@@ -48,47 +50,45 @@ class WorkWithVk:
         VK_auth = self.VK.get_api()
 
         try:
-            user = VK_auth.users.get()
-            user_info = VK_auth.users.get(fields='sex, '
-                                                 'bdate, '
-                                                 'city, '
-                                                 'interests, '
-                                                 'activities, '
-                                                 'movies, '
-                                                 'photo_400_orig')
-            user_friends = VK_auth.friends.getLists()
-            user_groups = VK_auth.groups.get()
+            self.User = VK_auth.users.get()
+            self.User_info = VK_auth.users.get(fields='sex, '
+                                                      'city, '
+                                                      'interests, '
+                                                      'activities, '
+                                                      'movies, '
+                                                      'photo_400_orig')
+            self.User_friends = VK_auth.friends.get()
+            self.User_groups = VK_auth.groups.get()
         except Exception as e:
             print(e)
-        else:
-            with open('vk_config.v2.json', 'r') as data_file:
-                data = json.load(data_file)
-            for xxx in data[self.login]['token'].keys():
-                for yyy in data[self.login]['token'][xxx].keys():
-                    self.access_token = data[self.login]['token'][xxx][yyy]['access_token']
-            for yyy in user_info:
-                self.city = yyy['city']['title']
-                self.sex = yyy['sex']
-                if self.sex == "1":
-                    self.sex = 'Женский'
-                elif self.sex == '2':
-                    self.sex = 'Мужской'
-                else:
-                    self.sex = "Не указан"
-                self.photo = yyy['photo_400_orig']
-                self.interests = yyy['interests']
-                self.activities = yyy['activities']
-                self.name = yyy['name']
-                self.bdate = datetime.datetime.now() - time.strptime(yyy['bdate'], '%D.%M.%YYYY')
-            for ggg in user_groups["response"]["items"]:
-                self.groups.append(ggg["id"])
-            for zzz in user_friends:
-                friends_id = zzz['id']
-                self.friends_id.append(friends_id)
-            self.user_id = f"https://vk.com/id{user[0]['id']}"
-            os.remove('vk_config.v2.json')
 
-    def getting_15_audios(self):
+    def detecting_data(self):
+        with open('vk_config.v2.json', 'r') as data_file:
+            self.data = json.load(data_file)
+        for xxx in self.data[self.login]['token'].keys():
+            for yyy in self.data[self.login]['token'][xxx].keys():
+                self.access_token = self.data[self.login]['token'][xxx][yyy]['access_token']
+        for yyy in self.User_info:
+            self.city = yyy['city']['title']
+            self.sex = yyy['sex']
+            if self.sex == "1":
+                self.sex = 'Женский'
+            elif self.sex == '2':
+                self.sex = 'Мужской'
+            else:
+                self.sex = "Не указан"
+            self.photo = yyy['photo_400_orig']
+            self.interests = yyy['interests']
+            self.activities = yyy['activities']
+            self.name = self.User[0]['first_name']
+        for ggg in self.User_groups["items"]:
+            self.groups.append(ggg)
+        for zzz in self.User_friends["items"]:
+            self.friends_id.append(zzz)
+        self.user_id = f"https://vk.com/id{self.User[0]['id']}"
+        os.remove('vk_config.v2.json')
+
+    def getting_audios(self):
         vk_audio = VkAudio(self.VK)
 
         artists = collections.Counter(
@@ -102,19 +102,20 @@ class WorkWithVk:
             self.audios.append(self.track['title'])
 
     def in_dict(self):
-        for _ in range(0, 15):
-            self.dictionary = {'id': self.user_id,
-                               'city': self.city,
-                               'name': self.name,
-                               'bdate': self.bdate,
-                               'photo': self.photo,
-                               'sex': self.sex,
-                               'interests': self.interests,
-                               'friends_id': self.friends_id,
-                               'audio': self.audios,
-                               'groups': self.groups}
+        self.dictionary = {'id': self.user_id,
+                           'city': self.city,
+                           'name': self.name,
+                           'photo': self.photo,
+                           'sex': self.sex,
+                           'interests': self.interests,
+                           'friends_id': self.friends_id,
+                           'audio': self.audios,
+                           'groups': self.groups}
+        return self.dictionary
 
 
 VK_class = WorkWithVk(log_in, pass_word)
 VK_class.LogIn()
-VK_class.getting_15_audios()
+VK_class.detecting_data()
+VK_class.getting_audios()
+VK_class.in_dict()
