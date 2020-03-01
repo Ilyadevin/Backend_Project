@@ -67,19 +67,50 @@ class WorkWithVk:
         for xxx in self.data[self.login]['token'].keys():
             for yyy in self.data[self.login]['token'][xxx].keys():
                 self.access_token = self.data[self.login]['token'][xxx][yyy]['access_token']
+
+    def check_input(self):
         for yyy in self.User_info:
             self.city = yyy['city']['title']
+            if self.city is True:
+                print(f'{self.city} - Ваш город?(Y/N) ')
+                decision = input()
+                if decision == 'N':
+                    self.city = input("Введите правильный город - ")
+                else:
+                    pass
+            self.city = input("Введите правильный город - ")
             self.sex = yyy['sex']
-            if self.sex == "1":
-                self.sex = 'Женский'
-            elif self.sex == '2':
-                self.sex = 'Мужской'
+            if self.sex is True:
+                if self.sex == "1":
+                    self.sex = 'Женский'
+                elif self.sex == '2':
+                    self.sex = 'Мужской'
+                else:
+                    self.sex = "Не указан"
             else:
-                self.sex = "Не указан"
+                self.sex = input('Введите ваш пол - ')
             self.photo = yyy['photo_400_orig']
             self.interests = yyy['interests']
-            self.activities = yyy['activities']
+            if self.interests is True:
+                print(self.interests)
+                print('Все данные верны?(Y/N) ')
+                decision = input()
+                if decision == 'N':
+                    self.interests = input("Чем вы занимаетесь в свободное время? ")
+                else:
+                    pass
+            else:
+                self.interests = input("Чем вы занимаетесь в свободное время? ")
             self.name = self.User[0]['first_name']
+            if self.name is True:
+                print(f"Вас зовут - {self.name}?(Y/N)")
+                decision = input()
+                if decision == 'N':
+                    self.name = input("Как вас зовут? ")
+                else:
+                    pass
+            else:
+                self.name = input("Как вас зовут? ")
         for ggg in self.User_groups["items"]:
             self.groups.append(ggg)
         for zzz in self.User_friends["items"]:
@@ -115,5 +146,6 @@ class WorkWithVk:
 VK_class = WorkWithVk(log_in, pass_word)
 VK_class.LogIn()
 VK_class.detecting_data()
+VK_class.check_input()
 VK_class.getting_audios()
 VK_class.in_dict()
