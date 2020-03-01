@@ -3,6 +3,7 @@ from vk_api.audio import VkAudio
 import os
 import json
 import collections
+import time
 
 print('Привет! Ты хочешь найти себе пару? '
       'У меня есть кое-что для тебя, но для начала - познакомимся!')
@@ -18,19 +19,33 @@ def auth_handler():
 
 
 class WorkWithVk:
-    def __init__(self, login, password, VK=None, user_id=None, access_token=0):
+    def __init__(self, login, password, VK=None):
         self.audios = []
         self.friends_id = []
         self.groups = []
         self.login = login
         self.password = password
         self.VK = VK
-        self.user_id = user_id
-        self.access_token = access_token
+        self.user_id = None
+        self.access_token = 0
+        self.User = None
+        self.User_info = None
+        self.User_friends = None
+        self.User_groups = None
+        self.data = None
+        self.city = None
+        self.sex = None
+        self.photo = None
+        self.dictionary = {}
+        self.interests = None
+        self.activities = None
+        self.name = None
 
     def LogIn(self):
         self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
+        time.sleep(2)
         self.VK.auth()
+        time.sleep(2)
         VK_auth = self.VK.get_api()
 
         try:
