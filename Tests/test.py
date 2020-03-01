@@ -13,7 +13,7 @@ class TestGettingData(unittest.TestCase):
     def test_api(self):
         log_in_class = WorkWithVk(self.log_in, self.pass_word).LogIn()
         self.assertIsInstance(log_in_class, list)
-        self.assertEqual(log_in_class[0]['id'], 177107169)
+        self.assertEqual(log_in_class[0]['id'], 1)
 
 
 data_test = TestGettingData()
