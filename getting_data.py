@@ -18,31 +18,15 @@ def auth_handler():
 
 
 class WorkWithVk:
-    def __init__(self, login, password, VK=None, user_id=None, access_token=0, dictionary=None, track=None):
+    def __init__(self, login, password, VK=None, user_id=None, access_token=0):
         self.audios = []
         self.friends_id = []
         self.groups = []
-        if dictionary is None:
-            dictionary = {}
         self.login = login
         self.password = password
         self.VK = VK
         self.user_id = user_id
         self.access_token = access_token
-        self.dictionary = dictionary
-        self.track = track
-        self.city = None
-        self.sex = None
-        self.photo = None
-        self.interests = None
-        self.music = None
-        self.activities = None
-        self.name = None
-        self.data = None
-        self.User = None
-        self.User_info = None
-        self.User_friends = None
-        self.User_groups = None
 
     def LogIn(self):
         self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
@@ -111,7 +95,6 @@ class WorkWithVk:
                            'friends_id': self.friends_id,
                            'audio': self.audios,
                            'groups': self.groups}
-        return self.dictionary
 
 
 VK_class = WorkWithVk(log_in, pass_word)

@@ -7,8 +7,8 @@ from getting_data import WorkWithVk
 class TestGettingData(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.log_in = 'Aligruit@gmail.com'
-        self.pass_word = '3322879IlyaDevin'
+        self.log_in = 'password'
+        self.pass_word = 'login'
 
     def test_api(self):
         log_in_class = WorkWithVk(self.log_in, self.pass_word).LogIn()
@@ -22,9 +22,9 @@ data_test.test_api()
 
 class TestForSQL(unittest.TestCase):
     def setUp(self) -> None:
-        self.dictionary = {'id': '177107169',
-                           'city': 'Moscow',
-                           'name': "Ilya",
+        self.dictionary = {'id': 'id',
+                           'city': 'moscow',
+                           'name': "name",
                            'bdate': 21,
                            'photo': 'URL',
                            'sex': "Мужской",

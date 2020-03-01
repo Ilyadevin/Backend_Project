@@ -12,28 +12,28 @@ connection = psycopg2.connect(
 cur = connection.cursor()
 
 
-# def create_db():
-#     Tables = None
-#     if not Tables:
-#         Tables = cur.execute('''CREATE TABLE ID_VK
-#                  (ID_S SERIAL PRIMARY KEY NOT NULL,
-#                  LINK TEXT NOT NULL,
-#                  NAME TEXT NOT NULL,
-#                  SEX TEXT NOT NULL,
-#                  SONGS TEXT NOT NULL,
-#                  CITY TEXT NOT NULL,
-#                  PHOTO_LINK TEXT NOT NULL,
-#                  INTERESTS TEXT NOT NULL,
-#                  GROUPS INT NOT NULL,
-#                  FRIENDS_ID INT NOT NULL,
-#                  MUSIC TEXT NOT NULL);
-#                  ''')
-#         connection.commit()
-#     else:
-#         pass
-#
-#
-# create_db()
+def create_db():
+    Tables = None
+    if not Tables:
+        Tables = cur.execute('''CREATE TABLE ID_VK
+                 (ID_S SERIAL PRIMARY KEY NOT NULL,
+                 LINK TEXT NOT NULL,
+                 NAME TEXT NOT NULL,
+                 SEX TEXT NOT NULL,
+                 SONGS TEXT NOT NULL,
+                 CITY TEXT NOT NULL,
+                 PHOTO_LINK TEXT NOT NULL,
+                 INTERESTS TEXT NOT NULL,
+                 GROUPS INT NOT NULL,
+                 FRIENDS_ID INT NOT NULL,
+                 MUSIC TEXT NOT NULL);
+                 ''')
+        connection.commit()
+    else:
+        pass
+
+
+create_db()
 
 
 class WriteInSQL(DataCheck):
@@ -41,6 +41,7 @@ class WriteInSQL(DataCheck):
         super().__init__()
 
     def write_in_data_base(self):
+        print()
         name = self.dictionary['name']
         groups = self.dictionary['groups']
         sex = self.dictionary['sex']

@@ -14,21 +14,6 @@ class DataCheck(WorkWithVk):
         self.new_data = {}
 
     def check_input(self):
-        if self.dictionary['sex'] == 'Мужской':
-            self.opposite_sex = 'Женский'
-        elif self.dictionary['sex'] == 'Женский':
-            self.opposite_sex = 'Мужской'
-        else:
-            print('Упс, у вас не указаг пол, хотите указать его сейчас?')
-            user_input_sex = input('Да / нет?')
-            if user_input_sex == 'Да' or 'да':
-                user_sex = input('>')
-                if user_sex == 'Мужской':
-                    self.opposite_sex = 'Женский'
-                elif user_sex == 'Женский':
-                    self.opposite_sex = 'Мужской'
-            if user_input_sex == 'Нет' or 'нет':
-                pass
         print("В ващем профиле есть информация, давайте проверим её!")
         print(f'Ваше имя - {self.dictionary["name"]}.\n'
               f'Вам - {self.dictionary["bdate"]}.\n'
@@ -41,6 +26,21 @@ class DataCheck(WorkWithVk):
             pass
         elif decide == 'N' or 'n':
             self.name = input("Ваше имя? ")
+            if self.dictionary['sex'] == 'Мужской':
+                self.opposite_sex = 'Женский'
+            elif self.dictionary['sex'] == 'Женский':
+                self.opposite_sex = 'Мужской'
+            else:
+                print('Упс, у вас не указаг пол, хотите указать его сейчас?')
+                user_input_sex = input('Да / нет?')
+                if user_input_sex == 'Да' or 'да':
+                    user_sex = input('>')
+                    if user_sex == 'Мужской':
+                        self.opposite_sex = 'Женский'
+                    elif user_sex == 'Женский':
+                        self.opposite_sex = 'Мужской'
+                if user_input_sex == 'Нет' or 'нет':
+                    pass
             self.age = input("Сколько вам лет? ")
             self.city = input("В каком городе вы живете? ")
             self.interests = input("Чем вы занимаетесь в свободное время? ")
@@ -53,7 +53,7 @@ class DataCheck(WorkWithVk):
                              'interests': self.interest_input}
             return self.new_data
         else:
-            print('Error')
+            print('Error, please try again')
 
     def update_dict(self):
         self.dictionary.update(self.new_data)
@@ -61,4 +61,5 @@ class DataCheck(WorkWithVk):
 
 
 dict_final = DataCheck()
+dict_final.check_input()
 dict_final.update_dict()
