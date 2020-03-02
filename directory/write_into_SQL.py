@@ -1,6 +1,5 @@
-from directory.check_user_data import DataCheck
+from getting_data import WorkWithVk, VK_class
 import psycopg2
-
 connection = psycopg2.connect(
     database="main_data_db",
     user="ilya_erlingas",
@@ -36,9 +35,9 @@ def create_db():
 create_db()
 
 
-class WriteInSQL(DataCheck):
-    def __init__(self):
-        super().__init__()
+class WriteInSQL(WorkWithVk):
+    def __init__(self, login=None, password=None):
+        super().__init__(login, password)
 
     def write_in_data_base(self):
         print()

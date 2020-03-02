@@ -37,7 +37,7 @@ class WorkWithVk:
         self.sex = None
         self.photo = None
         self.dictionary = {}
-        self.interests = None
+        self.interests = []
         self.activities = None
         self.name = None
 
@@ -71,46 +71,40 @@ class WorkWithVk:
     def check_input(self):
         for yyy in self.User_info:
             self.city = yyy['city']['title']
-            if self.city is True:
-                print(f'{self.city} - Ваш город?(Y/N) ')
-                decision = input()
-                if decision == 'N':
-                    self.city = input("Введите правильный город - ")
-                else:
-                    pass
-            self.city = input("Введите правильный город - ")
+            print(f'{self.city} - Ваш город?(Y/N) ')
+            decision = input('> ')
+            if decision == 'N':
+                self.city = input("Введите правильный город - ")
+            else:
+                pass
             self.sex = yyy['sex']
-            if self.sex is True:
-                if self.sex == "1":
-                    self.sex = 'Женский'
-                elif self.sex == '2':
-                    self.sex = 'Мужской'
-                else:
-                    self.sex = "Не указан"
+            if self.sex == 1:
+                self.sex = 'Женский'
+            elif self.sex == 2:
+                self.sex = 'Мужской'
             else:
+                self.sex = "Не указан"
+            print(f'Ваш пол - {self.sex}(Y/N)')
+            decision = input('> ')
+            if decision == 'N':
                 self.sex = input('Введите ваш пол - ')
+            else:
+                pass
             self.photo = yyy['photo_400_orig']
-            self.interests = yyy['interests']
-            if self.interests is True:
-                print(self.interests)
-                print('Все данные верны?(Y/N) ')
-                decision = input()
-                if decision == 'N':
-                    self.interests = input("Чем вы занимаетесь в свободное время? ")
-                else:
-                    pass
-            else:
-                self.interests = input("Чем вы занимаетесь в свободное время? ")
+            interest = yyy['interests']
+            print(f'Ваши интересы(из профиля) - {interest}')
+            print('Все данные верны?(Y/N) ')
+            decision = input('> ')
+            if decision == 'N':
+                interest = input("Чем вы занимаетесь в свободное время? ")
+                self.interests.append(interest.split(' '))
             self.name = self.User[0]['first_name']
-            if self.name is True:
-                print(f"Вас зовут - {self.name}?(Y/N)")
-                decision = input()
-                if decision == 'N':
-                    self.name = input("Как вас зовут? ")
-                else:
-                    pass
-            else:
+            print(f"Вас зовут - {self.name}?(Y/N)")
+            decision = input('> ')
+            if decision == 'N':
                 self.name = input("Как вас зовут? ")
+            else:
+                pass
         for ggg in self.User_groups["items"]:
             self.groups.append(ggg)
         for zzz in self.User_friends["items"]:
@@ -141,6 +135,7 @@ class WorkWithVk:
                            'friends_id': self.friends_id,
                            'audio': self.audios,
                            'groups': self.groups}
+        return self.dictionary
 
 
 VK_class = WorkWithVk(log_in, pass_word)

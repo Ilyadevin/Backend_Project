@@ -1,5 +1,5 @@
 import psycopg2
-from directory.check_user_data import DataCheck
+from getting_data import WorkWithVk
 import re
 
 connection = psycopg2.connect(
@@ -13,9 +13,9 @@ connection = psycopg2.connect(
 cur = connection.cursor()
 
 
-class DataCompare(DataCheck):
-    def __init__(self):
-        super().__init__()
+class DataCompare(WorkWithVk):
+    def __init__(self, login=None, password=None):
+        super().__init__(login, password)
         self.data = None
         self.comparing_string = self.dictionary['interests']
         self.comparing_ids = self.dictionary['friends_id']
