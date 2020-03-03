@@ -1,5 +1,6 @@
-from getting_data import WorkWithVk, VK_class
+from getting_data import WorkWithVk, dict_data
 import psycopg2
+
 connection = psycopg2.connect(
     database="main_data_db",
     user="ilya_erlingas",
@@ -36,21 +37,21 @@ create_db()
 
 
 class WriteInSQL(WorkWithVk):
-    def __init__(self, login=None, password=None):
+    def __init__(self, dictionary, login=None, password=None):
         super().__init__(login, password)
+        self.dictionary_new_data = dictionary
 
     def write_in_data_base(self):
-        print()
-        name = self.dictionary['name']
-        groups = self.dictionary['groups']
-        sex = self.dictionary['sex']
-        interests = self.dictionary['interest']
-        friends = self.dictionary['friends_id']
-        photo = self.dictionary['photo']
-        city = self.dictionary['city']
-        songs = self.dictionary['audio']
-        user_id_converted = self.dictionary['id']
-        audio = self.dictionary['audio']
+        name = self.dictionary_new_data['name']
+        groups = self.dictionary_new_data['groups']
+        sex = self.dictionary_new_data['sex']
+        interests = self.dictionary_new_data['interest']
+        friends = self.dictionary_new_data['friends_id']
+        photo = self.dictionary_new_data['photo']
+        city = self.dictionary_new_data['city']
+        songs = self.dictionary_new_data['audio']
+        user_id_converted = self.dictionary_new_data['id']
+        audio = self.dictionary_new_data['audio']
         cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID, GROUPS, '
                     'MUSIC) '
                     'VALUES(%s, %s, %s, %s, %s, %s, %s, %s);',
@@ -58,5 +59,5 @@ class WriteInSQL(WorkWithVk):
         connection.commit()
 
 
-SQL = WriteInSQL()
+SQL = WriteInSQL(dict_data)
 SQL.write_in_data_base()
