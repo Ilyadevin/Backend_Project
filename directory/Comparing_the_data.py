@@ -1,7 +1,6 @@
 import json
-
 import psycopg2
-from getting_data import WorkWithVk, dict_data
+from directory.write_into_SQL import dict_data
 import re
 
 connection = psycopg2.connect(
@@ -15,9 +14,8 @@ connection = psycopg2.connect(
 cur = connection.cursor()
 
 
-class DataCompare(WorkWithVk):
-    def __init__(self, dictionary, login=None, password=None):
-        super().__init__(login, password)
+class DataCompare:
+    def __init__(self, dictionary):
         self.dictionary_user_data = dictionary
         self.data = None
         self.comparing_string = self.dictionary_user_data['interests']
@@ -41,7 +39,7 @@ class DataCompare(WorkWithVk):
 
     def compare_the_data(self):
         for _ in range(0, 10):
-            if self.dictionary['age'] == self.dict_of_data[self.data[0]]['age'] \
+            if self.dictionary_user_data['age'] == self.dict_of_data[self.data[0]]['age'] \
                     or self.dict_of_data[self.data[0]]['age'] == -+3:
                 good_choice = 200
                 regex = re.compile(self.comparing_string)
