@@ -6,7 +6,9 @@ from directory.data_from_db import data_from_db
 
 
 class CompareTheData:
+
     def __init__(self, dictionary, dict_of_data):
+        self.whole_match = []
         self.dictionary_user_data = dictionary
         self.dict_of_data = dict_of_data
         self.comparing_string = self.dictionary_user_data['interests']
@@ -50,14 +52,17 @@ class CompareTheData:
                         'compared_id': self.dict_of_data.keys()
                         },
                 'compare_status': self.match}
+            self.whole_match.append(self.match)
         else:
             pass
 
     def finally_get_it(self):
-        if self.dictionary_compare is True:
-            print(json.dumps(self.dictionary_compare, indent=1))
-        else:
-            pass
+        sorted(self.whole_match)
+        for profile in enumerate(self.whole_match, 10):
+            if profile in self.dictionary_compare['compare_status']:
+                print(json.dumps(self.dictionary_compare['current user'].values(), indent=1))
+            else:
+                pass
 
 
 class_compared = CompareTheData(dictionary=dict_data, dict_of_data=data_from_db)
