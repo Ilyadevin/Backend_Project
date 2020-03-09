@@ -19,7 +19,7 @@ class DataCompare:
         self.dict_of_data = {}
 
     def select_data_from_db(self):
-        cur.execute('''SELECT ID_S, INTERESTS, FRIENDS_ID, GROUPS, MUSIC, AGE FROM ID_VK '''
+        cur.execute('''SELECT ID_S, INTERESTS, FRIENDS_ID, GROUPS, MUSIC, AGE, PHOTO_LINK FROM ID_VK '''
                     )
         self.data = cur.fetchall()
         self.dict_of_data = {
@@ -28,7 +28,8 @@ class DataCompare:
                            'interest': self.data[1],
                            'friends': self.data[2],
                            'groups': self.data[3],
-                           'music': self.data[4]}
+                           'music': self.data[4],
+                           'photo': self.data[6]}
         }
         return self.dict_of_data
 

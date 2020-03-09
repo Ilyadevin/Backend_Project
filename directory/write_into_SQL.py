@@ -1,4 +1,4 @@
-from getting_data import WorkWithVk, dict_data
+from directory.getting_data import WorkWithVk, dict_data
 import psycopg2
 
 connection = psycopg2.connect(

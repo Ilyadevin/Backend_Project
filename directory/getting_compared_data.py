@@ -1,3 +1,4 @@
+import json
 import re
 
 from directory.write_into_SQL import dict_data
@@ -45,14 +46,20 @@ class CompareTheData:
         if self.match >= 100:
             self.dictionary_compare = {
                 'ids': {'current user': self.dictionary_user_data['id'],
+                        'photo': self.dict_of_data.values()['photo'],
                         'compared_id': self.dict_of_data.keys()
                         },
                 'compare_status': self.match}
-            return self.dictionary_compare
+        else:
+            pass
+
+    def finally_get_it(self):
+        if self.dictionary_compare is True:
+            print(json.dumps(self.dictionary_compare, indent=1))
         else:
             pass
 
 
 class_compared = CompareTheData(dictionary=dict_data, dict_of_data=data_from_db)
 class_compared.compare_the_data()
-similar_data_users = class_compared.getting_similar_data()
+class_compared.getting_similar_data()
