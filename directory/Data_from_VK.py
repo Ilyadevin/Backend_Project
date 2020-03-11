@@ -19,15 +19,17 @@ def auth_handler():
 
 
 class WorkWithVk:
-    def __init__(self, login, password, VK=None):
+    def __init__(self, login, password):
+        self.login = login
+        self.password = password
+        self.access_token = 0
         self.audios = []
         self.friends_id = []
         self.groups = []
-        self.login = login
-        self.password = password
-        self.VK = VK
+        self.dictionary = {}
+        self.interests = []
+        self.VK = None
         self.user_id = None
-        self.access_token = 0
         self.User = None
         self.User_info = None
         self.User_friends = None
@@ -36,8 +38,6 @@ class WorkWithVk:
         self.city = None
         self.sex = None
         self.photo = None
-        self.dictionary = {}
-        self.interests = []
         self.activities = None
         self.name = None
 
@@ -73,7 +73,7 @@ class WorkWithVk:
             self.city = yyy['city']['title']
             print(f'{self.city} - Ваш город?(Y/N) ')
             decision = input('> ')
-            if decision == 'N':
+            if decision == 'N' or 'n':
                 self.city = input("Введите правильный город - ")
             else:
                 pass
@@ -82,11 +82,13 @@ class WorkWithVk:
                 self.sex = 'Женский'
             elif self.sex == 2:
                 self.sex = 'Мужской'
-            else:
+            elif self.sex == 3:
                 self.sex = "Не указан"
+            else:
+                print(TypeError, 'Данные введены не правильно!')
             print(f'Ваш пол - {self.sex}(Y/N)')
             decision = input('> ')
-            if decision == 'N':
+            if decision == 'N' or 'n':
                 self.sex = input('Введите ваш пол - ')
             else:
                 pass
@@ -95,13 +97,15 @@ class WorkWithVk:
             print(f'Ваши интересы(из профиля) - {interest}')
             print('Все данные верны?(Y/N) ')
             decision = input('> ')
-            if decision == 'N':
+            if decision == 'N' or 'n':
                 interest = input("Чем вы занимаетесь в свободное время? ")
                 self.interests.append(interest.split(' '))
+            else:
+                pass
             self.name = self.User[0]['first_name']
             print(f"Вас зовут - {self.name}?(Y/N)")
             decision = input('> ')
-            if decision == 'N':
+            if decision == 'N' or 'n':
                 self.name = input("Как вас зовут? ")
             else:
                 pass

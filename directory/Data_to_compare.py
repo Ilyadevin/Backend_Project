@@ -1,5 +1,5 @@
 import psycopg2
-from directory.write_into_SQL import dict_data
+from directory.Data_from_VK import dict_data
 
 connection = psycopg2.connect(
     database="main_data_db",

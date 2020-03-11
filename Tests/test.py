@@ -1,7 +1,6 @@
 import unittest
-
-from directory.write_into_SQL import WriteInSQL
-from directory.getting_data import WorkWithVk
+from directory.Writting_to_SQL_db import WriteInSQL
+from directory.Data_from_VK import WorkWithVk
 
 
 class TestGettingData(unittest.TestCase):

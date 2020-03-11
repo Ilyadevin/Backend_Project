@@ -1,8 +1,8 @@
 import json
 import re
 
-from directory.write_into_SQL import dict_data
-from directory.data_from_db import data_from_db
+from directory.Writting_to_SQL_db import dict_data
+from directory.Data_to_compare import data_from_db
 
 
 class CompareTheData:
@@ -19,7 +19,7 @@ class CompareTheData:
 
     def compare_the_data(self):
         try:
-            for _, id_vk in range(0, 10), self.dict_of_data:
+            for id_vk in range(0, 10), self.dict_of_data:
                 if id_vk == self.dictionary_user_data['id']:
                     continue
                 else:
