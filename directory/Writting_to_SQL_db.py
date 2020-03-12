@@ -1,4 +1,3 @@
-from directory.Data_from_VK import WorkWithVk, dict_data
 import psycopg2
 
 connection = psycopg2.connect(
@@ -13,9 +12,7 @@ cur = connection.cursor()
 
 
 def create_db():
-    Tables = None
-    if not Tables:
-        Tables = cur.execute('''CREATE TABLE ID_VK
+    cur.execute('''CREATE TABLE ID_VK
                  (ID_S SERIAL PRIMARY KEY NOT NULL,
                  LINK TEXT NOT NULL,
                  NAME TEXT NOT NULL,
@@ -28,45 +25,55 @@ def create_db():
                  FRIENDS_ID INT NOT NULL,
                  MUSIC TEXT NOT NULL);
                  ''')
-        connection.commit()
-    else:
-        pass
+    connection.commit()
+
+    cur.execute('''CREATE TABLE MATCHING
+                (ID SERIAL PRIMARY KEY NOT NULL,
+                FIRST_ID TEXT NOT NULL,
+                PHOTO_LINK TEXT NOT NULL,
+                SECOND_ID TEXT NOT NULL
+                MATCH INT NOT NULL);''')
 
 
 create_db()
 
 
-class WriteInSQL(WorkWithVk):
-    def __init__(self, dictionary, login=None, password=None):
-        super().__init__(login, password)
-        self.dictionary_new_data = dictionary
+class WriteInSQL:
+    def __init__(self, dictionary_profile, dictionary_match):
+        self.dictionary_profile = dictionary_profile
+        self.dictionary_match = dictionary_match
+
+    def write_matching_status(self):
+        cur.execute('INSERT INTO MATCHING(FIRST_ID, PHOTO_LINK, SECOND_ID, MATCH INT)'
+                    'VALUES(%s, %s, %s, %s);',
+                    (self.dictionary_match['ids']['current user'], self.dictionary_match['ids']['photo'],
+                     self.dictionary_match['ids']['compared_id'], self.dictionary_match['compare_status'],))
+        connection.commit()
 
     def write_in_data_base(self):
         print("Хотите ли вы чтобы данные вашего профиля были записаны в общую базу данных?(Y/N) ")
         print("Данные используются для статистики и возможного построения выстроения рекламы специально под вас")
         decision = input()
-        if decision == 'Y' or 'y':
-            name = self.dictionary_new_data['name']
-            groups = self.dictionary_new_data['groups']
-            sex = self.dictionary_new_data['sex']
-            interests = self.dictionary_new_data['interest']
-            friends = self.dictionary_new_data['friends_id']
-            photo = self.dictionary_new_data['photo']
-            city = self.dictionary_new_data['city']
-            songs = self.dictionary_new_data['audio']
-            user_id_converted = self.dictionary_new_data['id']
-            audio = self.dictionary_new_data['audio']
+        if decision == 'Y':
+            name = self.dictionary_profile['name']
+            groups = self.dictionary_profile['groups']
+            sex = self.dictionary_profile['sex']
+            interests = self.dictionary_profile['interest']
+            friends = self.dictionary_profile['friends_id']
+            photo = self.dictionary_profile['photo']
+            city = self.dictionary_profile['city']
+            songs = self.dictionary_profile['audio']
+            user_id_converted = self.dictionary_profile['id']
+            audio = self.dictionary_profile['audio']
             cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID, '
                         'GROUPS, '
                         'MUSIC) '
                         'VALUES(%s, %s, %s, %s, %s, %s, %s, %s);',
                         (user_id_converted, name, city, photo, sex, interests, songs, friends, groups, audio,))
             connection.commit()
-        elif decision == 'N' or 'n':
+        elif decision == 'N':
             print('Данные не будут записаны в базу')
-            pass
+        else:
+            print('Error')
+
         return connection.commit()
-
-
-SQL = WriteInSQL(dict_data)
-SQL.write_in_data_base()

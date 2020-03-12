@@ -42,9 +42,15 @@ class WorkWithVk:
         self.name = None
 
     def LogIn(self):
-        self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
+        try:
+            self.VK = vk_api.VkApi(self.login, self.password, auth_handler=auth_handler)
+        except Exception as exception_vk_api:
+            print(exception_vk_api)
         time.sleep(2)
-        self.VK.auth()
+        try:
+            self.VK.auth()
+        except Exception as exception_auth:
+            print(exception_auth)
         time.sleep(2)
         VK_auth = self.VK.get_api()
 
@@ -73,7 +79,8 @@ class WorkWithVk:
             self.city = yyy['city']['title']
             print(f'{self.city} - Ваш город?(Y/N) ')
             decision = input('> ')
-            if decision == 'N' or 'n':
+            if decision == 'N':
+                breakpoint()
                 self.city = input("Введите правильный город - ")
             else:
                 pass
@@ -88,7 +95,7 @@ class WorkWithVk:
                 print(TypeError, 'Данные введены не правильно!')
             print(f'Ваш пол - {self.sex}(Y/N)')
             decision = input('> ')
-            if decision == 'N' or 'n':
+            if decision == 'N':
                 self.sex = input('Введите ваш пол - ')
             else:
                 pass
@@ -97,7 +104,7 @@ class WorkWithVk:
             print(f'Ваши интересы(из профиля) - {interest}')
             print('Все данные верны?(Y/N) ')
             decision = input('> ')
-            if decision == 'N' or 'n':
+            if decision == 'N':
                 interest = input("Чем вы занимаетесь в свободное время? ")
                 self.interests.append(interest.split(' '))
             else:
@@ -105,7 +112,7 @@ class WorkWithVk:
             self.name = self.User[0]['first_name']
             print(f"Вас зовут - {self.name}?(Y/N)")
             decision = input('> ')
-            if decision == 'N' or 'n':
+            if decision == 'N':
                 self.name = input("Как вас зовут? ")
             else:
                 pass

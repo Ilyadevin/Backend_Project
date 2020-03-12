@@ -1,8 +1,7 @@
 import json
 import re
-
-from directory.Writting_to_SQL_db import dict_data
-from directory.Data_to_compare import data_from_db
+from directory.Writting_to_json_file import json_data, dict_data
+from directory.Writting_to_SQL_db import WriteInSQL
 
 
 class CompareTheData:
@@ -64,7 +63,19 @@ class CompareTheData:
             else:
                 pass
 
+    def writting_data_to_db(self):
+        print('Мы подобрали вам пару!\n'
+              'Хотите ли вы записать результаты подбора в базу данных?(Y/N)')
+        decision = input('> ')
+        if decision == 'Y':
+            SQL = WriteInSQL(dictionary_profile=dict_data, dictionary_match=self.dictionary_compare)
+            SQL.write_in_data_base()
+        elif decision == 'N':
+            print('Данные не будут записаны. ')
+        else:
+            pass
 
-class_compared = CompareTheData(dictionary=dict_data, dict_of_data=data_from_db)
+
+class_compared = CompareTheData(dictionary=dict_data, dict_of_data=json_data)
 class_compared.compare_the_data()
 class_compared.getting_similar_data()

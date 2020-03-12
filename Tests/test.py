@@ -33,7 +33,7 @@ class TestForSQL(unittest.TestCase):
                            'groups': 'some groups id'}
 
     def test_SQL(self):
-        WriteInSQL().write_in_data_base()
+        WriteInSQL().write_in_data_base
 
 
 TestForSQL().test_SQL()
