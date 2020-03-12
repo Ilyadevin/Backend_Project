@@ -57,7 +57,7 @@ class CompareTheData:
 
     def finally_get_it(self):
         sorted(self.whole_match)
-        for profile in enumerate(self.whole_match, 10):
+        for profile in range(len(self.whole_match), 10):
             if profile in self.dictionary_compare['compare_status']:
                 print(json.dumps(self.dictionary_compare['current user'].values(), indent=1))
             else:
