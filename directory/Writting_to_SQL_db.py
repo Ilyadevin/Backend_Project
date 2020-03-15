@@ -50,7 +50,7 @@ class WriteInSQL:
                      self.dictionary_match['ids']['compared_id'], self.dictionary_match['compare_status'],))
         connection.commit()
 
-    def write_in_data_base(self):
+    def write_profile_in_data_base(self):
         print("Хотите ли вы чтобы данные вашего профиля были записаны в общую базу данных?(Y/N) ")
         print("Данные используются для статистики и возможного построения выстроения рекламы специально под вас")
         decision = input()

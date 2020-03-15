@@ -63,13 +63,13 @@ class CompareTheData:
             else:
                 pass
 
-    def writting_data_to_db(self):
+    def writing_data_to_db(self):
         print('Мы подобрали вам пару!\n'
               'Хотите ли вы записать результаты подбора в базу данных?(Y/N)')
         decision = input('> ')
         if decision == 'Y':
             SQL = WriteInSQL(dictionary_profile=dict_data, dictionary_match=self.dictionary_compare)
-            SQL.write_in_data_base()
+            SQL.write_profile_in_data_base()
         elif decision == 'N':
             print('Данные не будут записаны. ')
         else:

@@ -31,9 +31,19 @@ class TestForSQL(unittest.TestCase):
                            'friends_id': 'some friends id',
                            'audio': 'some audio',
                            'groups': 'some groups id'}
+        self.dictionary_matching_test = {
+                'ids': {'current user': 1,
+                        'photo': 'http//...',
+                        'compared_id': 2
+                        },
+                'compare_status': 101}
 
     def test_SQL(self):
-        WriteInSQL().write_in_data_base
+        test_SQL_write = WriteInSQL(dictionary_match=self.dictionary_matching_test, dictionary_profile=self.dictionary)
+        test_SQL_write.write_matching_status()
+        self.assertTrue(test_SQL_write.write_matching_status())
+        test_SQL_write.write_profile_in_data_base()
+        self.assertTrue(test_SQL_write.write_profile_in_data_base())
 
 
 TestForSQL().test_SQL()

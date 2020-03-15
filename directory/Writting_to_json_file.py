@@ -1,6 +1,7 @@
 import json
 from directory.Data_from_VK import dict_data
 
+
 class WriteJson:
     def __init__(self, data):
         self.data = data
@@ -11,5 +12,5 @@ class WriteJson:
         return templates
 
 
-json_writting = WriteJson(dict_data)
-json_data = json_writting.save_in_json()
+json_writing = WriteJson(dict_data)
+json_data = json_writing.save_in_json()
