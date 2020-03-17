@@ -1,6 +1,7 @@
 import unittest
 from directory.Writting_to_SQL_db import WriteInSQL
 from directory.Data_from_VK import WorkWithVk
+import json
 
 
 class TestGettingData(unittest.TestCase):
@@ -32,11 +33,11 @@ class TestForSQL(unittest.TestCase):
                            'audio': 'some audio',
                            'groups': 'some groups id'}
         self.dictionary_matching_test = {
-                'ids': {'current user': 1,
-                        'photo': 'http//...',
-                        'compared_id': 2
-                        },
-                'compare_status': 101}
+            'ids': {'current user': 1,
+                    'photo': 'http//...',
+                    'compared_id': 2
+                    },
+            'compare_status': 101}
 
     def test_SQL(self):
         test_SQL_write = WriteInSQL(dictionary_match=self.dictionary_matching_test, dictionary_profile=self.dictionary)
@@ -47,3 +48,18 @@ class TestForSQL(unittest.TestCase):
 
 
 TestForSQL().test_SQL()
+
+
+def setUpModule():
+    with open('C:/Users/г/Desktop/WorkSpace/Project_Netology/directory/service_data.json', 'r',
+              encoding='utf-8') as json_data:
+        data = json.load(json_data)
+        return data
+
+
+class TestJsonFile(unittest.TestCase):
+    def setUp(self) -> None:
+        self.test_data = setUpModule()
+
+    def test_json(self):
+        self.assertTrue(self.test_data)
