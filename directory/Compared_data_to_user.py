@@ -15,6 +15,7 @@ class CompareTheData:
         self.groups_from_dict = self.dictionary_user_data['groups']
         self.dictionary_compare = dict
         self.match = 0
+        self.SQL = WriteInSQL(dictionary_profile=dict_data, dictionary_match=self.dictionary_compare)
 
     def compare_the_data(self):
         try:
@@ -68,12 +69,26 @@ class CompareTheData:
               'Хотите ли вы записать результаты подбора в базу данных?(Y/N)')
         decision = input('> ')
         if decision == 'Y':
-            SQL = WriteInSQL(dictionary_profile=dict_data, dictionary_match=self.dictionary_compare)
-            SQL.write_profile_in_data_base()
+
+            self.SQL.write_profile_in_data_base()
+            self.SQL.write_matching_status()
         elif decision == 'N':
             print('Данные не будут записаны. ')
         else:
             pass
+
+    def getting_ids_data(self):
+        print('Если вы записали данные в базу у вас есть возможность посмотреть предидущие результаты :)')
+        print('(Y/N)')
+        decision = input('> ')
+        if decision == 'Y' or 'y':
+            self.SQL.joined_table()
+            for data in self.SQL.joined_table():
+                print(data)
+        elif decision == 'N' or 'n':
+            print('Если передумаешь - возвращайся!')
+        else:
+            print('Неверная команда')
 
 
 class_compared = CompareTheData(dictionary=dict_data, dict_of_data=json_data)

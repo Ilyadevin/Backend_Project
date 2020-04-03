@@ -8,12 +8,12 @@ connection = psycopg2.connect(
     port="5432"
 )
 
-cur = connection.cursor()
+cursor = connection.cursor()
 
 
 def create_db():
-    cur.execute('''CREATE TABLE ID_VK
-                 (ID_S SERIAL PRIMARY KEY NOT NULL,
+    cursor.execute('''CREATE TABLE ID_VK
+                 (ID_US SERIAL PRIMARY KEY NOT NULL,
                  LINK TEXT NOT NULL,
                  NAME TEXT NOT NULL,
                  SEX TEXT NOT NULL,
@@ -27,12 +27,17 @@ def create_db():
                  ''')
     connection.commit()
 
-    cur.execute('''CREATE TABLE MATCHING
+    cursor.execute('''CREATE TABLE MATCHING
                 (ID SERIAL PRIMARY KEY NOT NULL,
                 FIRST_ID TEXT NOT NULL,
                 PHOTO_LINK TEXT NOT NULL,
-                SECOND_ID TEXT NOT NULL
+                SECOND_ID TEXT NOT NULL,
                 MATCH INT NOT NULL);''')
+    cursor.execute('''CREATE TABLE JOINED_TABLE
+    (ID SERIAL PRIMARY KEY NOT NULL,
+    ID_VK_ONE TEXT REFERENCES ID_VK(ID_US),
+    ID_VK_ANOTHER TEXT REFERENCES MATCHING(SECOND_ID),
+    MATCHING_STATUS INT REFERENCES MATCHING(MATCH));''')
 
 
 create_db()
@@ -44,10 +49,10 @@ class WriteInSQL:
         self.dictionary_match = dictionary_match
 
     def write_matching_status(self):
-        cur.execute('INSERT INTO MATCHING(FIRST_ID, PHOTO_LINK, SECOND_ID, MATCH INT)'
-                    'VALUES(%s, %s, %s, %s);',
-                    (self.dictionary_match['ids']['current user'], self.dictionary_match['ids']['photo'],
-                     self.dictionary_match['ids']['compared_id'], self.dictionary_match['compare_status'],))
+        cursor.execute('''INSERT INTO MATCHING(FIRST_ID, PHOTO_LINK, SECOND_ID, MATCH INT)'''
+                       '''VALUES(%s, %s, %s, %s);''',
+                       (self.dictionary_match['ids']['current user'], self.dictionary_match['ids']['photo'],
+                        self.dictionary_match['ids']['compared_id'], self.dictionary_match['compare_status'],))
         connection.commit()
 
     def write_profile_in_data_base(self):
@@ -65,11 +70,11 @@ class WriteInSQL:
             songs = self.dictionary_profile['audio']
             user_id_converted = self.dictionary_profile['id']
             audio = self.dictionary_profile['audio']
-            cur.execute('INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID, '
-                        'GROUPS, '
-                        'MUSIC) '
-                        'VALUES(%s, %s, %s, %s, %s, %s, %s, %s);',
-                        (user_id_converted, name, city, photo, sex, interests, songs, friends, groups, audio,))
+            cursor.execute('''INSERT INTO ID_VK(LINK,NAME,CITY, PHOTO_LINK, SEX, INTERESTS, SONGS, CITY, FRIENDS_ID, '''
+                           '''GROUPS, '''
+                           '''MUSIC) '''
+                           '''VALUES(%s, %s, %s, %s, %s, %s, %s, %s);''',
+                           (user_id_converted, name, city, photo, sex, interests, songs, friends, groups, audio,))
             connection.commit()
         elif decision == 'N':
             print('Данные не будут записаны в базу')
@@ -77,3 +82,15 @@ class WriteInSQL:
             print('Error')
 
         return connection.commit()
+
+    def writing_in_joined_table(self):
+        cursor.execute('''INSERT INTO JOINED_TABLE(ID_VK_ONE, ID_VK_ANOTHER, MATCHING_STATUS) VALUES(%s, %s, %s)''',
+                       (self.dictionary_match['ids']['current user'], self.dictionary_match['ids']['compared_id'],
+                        self.dictionary_match['compare_status'],))
+        return connection.commit()
+
+    def joined_table(self):
+        cursor.execute('''SELECT ID_VK_ONE, ID_VK_ANOTHER, MATCHING_STATUS
+            FROM JOINED_TABLE WHERE ID_VK_ONE=%s''',
+                       (self.dictionary_match['ids']['current user'],))
+        return cursor.fetchall()
