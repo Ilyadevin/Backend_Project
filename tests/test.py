@@ -1,6 +1,6 @@
 import unittest
-from directory.Writting_to_SQL_db import WriteInSQL
-from directory.Data_from_VK import WorkWithVk
+from working_with_db.writing_to_SQL_db import WriteInSQL
+from data_vk.data_from_VK import WorkWithVk
 import json
 
 
@@ -51,7 +51,7 @@ TestForSQL().test_SQL()
 
 
 def setUpModule():
-    with open('C:/Users/г/Desktop/WorkSpace/Project_Netology/directory/service_data.json', 'r',
+    with open('C:/Users/г/Desktop/WorkSpace/Project_Netology/getting_compared_data/service_data.json', 'r',
               encoding='utf-8') as json_data:
         data = json.load(json_data)
         return data

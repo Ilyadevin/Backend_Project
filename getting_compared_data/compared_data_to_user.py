@@ -1,7 +1,7 @@
 import json
 import re
-from directory.Writting_to_json_file import json_data, dict_data
-from directory.Writting_to_SQL_db import WriteInSQL
+from data_vk.writing_to_json_file import json_data, dict_data
+from working_with_db.writing_to_SQL_db import WriteInSQL
 
 
 class CompareTheData:

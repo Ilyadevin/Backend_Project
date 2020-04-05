@@ -1,2 +1,2 @@
 if __name__ == '__main__':
-    import directory.Compared_data_to_user as we_get_it
+    import getting_compared_data.compared_data_to_user 
