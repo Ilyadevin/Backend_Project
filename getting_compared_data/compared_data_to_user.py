@@ -68,14 +68,17 @@ class CompareTheData:
         print('Мы подобрали вам пару!\n'
               'Хотите ли вы записать результаты подбора в базу данных?(Y/N)')
         decision = input('> ')
-        if decision == 'Y':
+        try:
+            if decision == 'Y':
 
-            self.SQL.write_profile_in_data_base()
-            self.SQL.write_matching_status()
-        elif decision == 'N':
-            print('Данные не будут записаны. ')
-        else:
-            pass
+                self.SQL.write_profile_in_data_base()
+                self.SQL.write_matching_status()
+            elif decision == 'N':
+                print('Данные не будут записаны. ')
+            else:
+                pass
+        except Exception as error:
+            print(error)
 
     def getting_ids_data(self):
         print('Если вы записали данные в базу у вас есть возможность посмотреть предидущие результаты :)')
