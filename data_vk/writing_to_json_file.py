@@ -7,9 +7,12 @@ class WriteJson:
         self.data = data
 
     def save_in_json(self):
-        with open('../service_data.json', 'a', encoding='utf8') as file:
-            templates = json.dump(self.data, file)
-        return templates
+        try:
+            with open('../service_data.json', 'a', encoding='utf8') as file:
+                templates = json.dump(self.data, file)
+            return templates
+        except Exception as error:
+            print(error)
 
 
 json_writing = WriteJson(dict_data)

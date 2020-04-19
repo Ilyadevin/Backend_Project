@@ -68,59 +68,68 @@ class WorkWithVk:
             print(e)
 
     def detecting_data(self):
-        with open('vk_config.v2.json', 'r') as data_file:
-            self.data = json.load(data_file)
-        for xxx in self.data[self.login]['token'].keys():
-            for yyy in self.data[self.login]['token'][xxx].keys():
-                self.access_token = self.data[self.login]['token'][xxx][yyy]['access_token']
+        try:
+            with open('vk_config.v2.json', 'r') as data_file:
+                self.data = json.load(data_file)
+            for xxx in self.data[self.login]['token'].keys():
+                for yyy in self.data[self.login]['token'][xxx].keys():
+                    self.access_token = self.data[self.login]['token'][xxx][yyy]['access_token']
+        except Exception as error:
+            print(error)
 
     def check_input(self):
-        for yyy in self.User_info:
-            self.city = yyy['city']['title']
-            print(f'{self.city} - Ваш город?(Y/N) ')
-            decision = input('> ')
-            if decision == 'N':
-                breakpoint()
-                self.city = input("Введите правильный город - ")
-            else:
-                pass
-            self.sex = yyy['sex']
-            if self.sex == 1:
-                self.sex = 'Женский'
-            elif self.sex == 2:
-                self.sex = 'Мужской'
-            elif self.sex == 3:
-                self.sex = "Не указан"
-            else:
-                print(TypeError, 'Данные введены не правильно!')
-            print(f'Ваш пол - {self.sex}(Y/N)')
-            decision = input('> ')
-            if decision == 'N':
-                self.sex = input('Введите ваш пол - ')
-            else:
-                pass
-            self.photo = yyy['photo_400_orig']
-            interest = yyy['interests']
-            print(f'Ваши интересы(из профиля) - {interest}')
-            print('Все данные верны?(Y/N) ')
-            decision = input('> ')
-            if decision == 'N':
-                interest = input("Чем вы занимаетесь в свободное время? ")
-                self.interests.append(interest.split(' '))
-            else:
-                pass
-            self.name = self.User[0]['first_name']
-            print(f"Вас зовут - {self.name}?(Y/N)")
-            decision = input('> ')
-            if decision == 'N':
-                self.name = input("Как вас зовут? ")
-            else:
-                pass
-        for ggg in self.User_groups["items"]:
-            self.groups.append(ggg)
-        for zzz in self.User_friends["items"]:
-            self.friends_id.append(zzz)
-        self.user_id = f"https://vk.com/id{self.User[0]['id']}"
+        try:
+            for yyy in self.User_info:
+                self.city = yyy['city']['title']
+                print(f'{self.city} - Ваш город?(Y/N) ')
+                decision = input('> ')
+                if decision == 'N':
+                    breakpoint()
+                    self.city = input("Введите правильный город - ")
+                else:
+                    pass
+                self.sex = yyy['sex']
+                if self.sex == 1:
+                    self.sex = 'Женский'
+                elif self.sex == 2:
+                    self.sex = 'Мужской'
+                elif self.sex == 3:
+                    self.sex = "Не указан"
+                else:
+                    print(TypeError, 'Данные введены не правильно!')
+                print(f'Ваш пол - {self.sex}(Y/N)')
+                decision = input('> ')
+                if decision == 'N':
+                    self.sex = input('Введите ваш пол - ')
+                else:
+                    pass
+                self.photo = yyy['photo_400_orig']
+                interest = yyy['interests']
+                print(f'Ваши интересы(из профиля) - {interest}')
+                print('Все данные верны?(Y/N) ')
+                decision = input('> ')
+                if decision == 'N':
+                    interest = input("Чем вы занимаетесь в свободное время? ")
+                    self.interests.append(interest.split(' '))
+                else:
+                    pass
+                self.name = self.User[0]['first_name']
+                print(f"Вас зовут - {self.name}?(Y/N)")
+                decision = input('> ')
+                if decision == 'N':
+                    self.name = input("Как вас зовут? ")
+                else:
+                    pass
+        except Exception as error_in_input:
+            print(error_in_input)
+        try:
+            for ggg in self.User_groups["items"]:
+                self.groups.append(ggg)
+            for zzz in self.User_friends["items"]:
+                self.friends_id.append(zzz)
+            self.user_id = f"https://vk.com/id{self.User[0]['id']}"
+        except Exception as error_in_dict:
+            print(error_in_dict)
         os.remove('vk_config.v2.json')
 
     def getting_audios(self):
