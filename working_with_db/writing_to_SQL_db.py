@@ -48,6 +48,17 @@ class WriteInSQL:
         self.dictionary_profile = dictionary_profile
         self.dictionary_match = dictionary_match
 
+    def check_profile_existence(self):
+        cursor.execute('''SELECT LINK FROM ID_VK WHERE LINK = %s''',
+                       (self.dictionary_profile['id']))
+        decision = cursor.fetchall()
+        if decision is True:
+            user_result = True
+        elif decision is False:
+            user_result = False
+        else:
+            pass
+
     def write_matching_status(self):
         cursor.execute('''INSERT INTO MATCHING(FIRST_ID, PHOTO_LINK, SECOND_ID, MATCH INT)'''
                        '''VALUES(%s, %s, %s, %s);''',
